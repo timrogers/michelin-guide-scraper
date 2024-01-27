@@ -1,0 +1,27 @@
+{
+  "name": "michelin-guide-scraper",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "A web scraper for gathering information about restaurants featured in the MICHELIN Guide (<https://guide.michelin.com>)",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "start": "node --loader ts-node/esm src/index.ts"
+  },
+  "author": "Tim Rogers <me@timrogers.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "undici": "^6.5.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
