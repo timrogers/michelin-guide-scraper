@@ -129,8 +129,10 @@ const getRestaurants = async (restaurantUrls: Set<string>): Promise<Restaurant[]
   const restaurants: Restaurant[] = [];
 
   const restaurantsCount = restaurantUrls.size;
+  const restaurantUrlsArray = Array.from(restaurantUrls);
 
-  for (const [index, url] of Array.from(restaurantUrls).entries()) {
+  for (let index = 0; index < restaurantUrlsArray.length; index++) {
+    const url = restaurantUrlsArray[index];
     console.log(
       `Fetching restaurant details from ${url} (${index + 1}/${restaurantsCount})...`,
     );
