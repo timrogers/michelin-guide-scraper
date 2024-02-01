@@ -1,4 +1,5 @@
-import { fetch, Response } from 'undici';
+import { Response } from 'undici';
+import fetch from './fetch.js';
 import * as cheerio from 'cheerio';
 import { promises as fs } from 'fs';
 
@@ -14,6 +15,10 @@ const validateResponse = (response: Response) => {
     );
   }
 };
+
+const sleep = (milliseconds: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
 
 const getLastPageNumber = async (): Promise<number> => {
   const response = await fetch(INITIAL_URL);
@@ -84,19 +89,24 @@ interface Restaurant {
   hasDriveThroughService: string;
 }
 
-const getRestaurantDetailsFromUrl = async (url: string): Promise<Restaurant> => {
-  const response = await fetch(url);
-  validateResponse(response);
+const getRestaurantDetailsFromUrl = async (url: string): Promise<Restaurant | undefined> => {
+  try {
+    const response = await fetch(url);
+    validateResponse(response);
 
-  const html = await response.text();
-  const $ = cheerio.load(html);
-  const metadataJson = $('script[type="application/ld+json"]').html();
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const metadataJson = $('script[type="application/ld+json"]').html();
 
-  if (!metadataJson) {
-    throw new Error(`Failed to find metadata JSON at ${url}`);
+    if (!metadataJson) {
+      throw new Error(`Failed to find metadata JSON at ${url}`);
+    }
+
+    return JSON.parse(metadataJson) as Restaurant;
+  } catch (e) {
+    console.error(`Failed to fetch restaurant details from ${url}`);
+    console.error(e);
   }
-
-  return JSON.parse(metadataJson) as Restaurant;
 };
 
 const getRestaurantUrls = async (lastPageNumber: number): Promise<Set<string>> => {
@@ -109,9 +119,7 @@ const getRestaurantUrls = async (lastPageNumber: number): Promise<Set<string>> =
     const urls = await getRestaurantUrlsOnPage(pageNumber);
     urls.forEach((url) => restaurantUrls.add(url));
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, DELAY_BETWEEN_PAGES_IN_MILLISECONDS),
-    );
+    await sleep(DELAY_BETWEEN_PAGES_IN_MILLISECONDS);
   }
 
   return restaurantUrls;
@@ -127,11 +135,9 @@ const getRestaurants = async (restaurantUrls: Set<string>): Promise<Restaurant[]
       `Fetching restaurant details from ${url} (${index + 1}/${restaurantsCount})...`,
     );
     const restaurant = await getRestaurantDetailsFromUrl(url);
-    restaurants.push(restaurant);
+    if (restaurant) restaurants.push(restaurant);
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, DELAY_BETWEEN_PAGES_IN_MILLISECONDS),
-    );
+    await sleep(DELAY_BETWEEN_PAGES_IN_MILLISECONDS);
   }
 
   return restaurants;
