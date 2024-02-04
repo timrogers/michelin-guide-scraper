@@ -23,3 +23,11 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
+      - name: Perform limited run of script
+        run: npm run start -- --limit 1
+      - name: Upload data/restaurants.json as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: restaurants.json
+          path: data/restaurants.json
+          if-no-files-found: error
