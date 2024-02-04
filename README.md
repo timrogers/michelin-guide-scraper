@@ -45,7 +45,7 @@ The output looks like this:
   },
   // ...
 ]
-````
+```
 
 ## Usage
 
