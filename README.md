@@ -54,5 +54,5 @@ The output looks like this:
 1. Make sure Node.js is available on your machine. v20 is recommended.
 1. Clone the repository: `git clone git@github.com:timrogers/michelin-guide-scraper.git`
 1. Install the dependencies: `npm i`.
-1. Start the scraper: `npm start`.
+1. Start the scraper: `npm start`. Optionally, you can use the `--limit` argument to limit the number of restaurants scraped (e.g. `npm start -- --limit 1`).
 1. Wait a while! The data will be written to `data/restaurants.json`.
