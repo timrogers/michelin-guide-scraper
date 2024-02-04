@@ -8,7 +8,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Node"
   },
   "include": ["./src", "./test", "jest.config.ts"],
   "exclude": ["node_modules"]

@@ -18,7 +18,7 @@ const validateResponse = (response: Response) => {
 
 const sleep = (milliseconds: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
+};
 
 const getLastPageNumber = async (): Promise<number> => {
   const response = await fetch(INITIAL_URL);
@@ -89,7 +89,9 @@ interface Restaurant {
   hasDriveThroughService: string;
 }
 
-const getRestaurantDetailsFromUrl = async (url: string): Promise<Restaurant | undefined> => {
+const getRestaurantDetailsFromUrl = async (
+  url: string,
+): Promise<Restaurant | undefined> => {
   try {
     const response = await fetch(url);
     validateResponse(response);
