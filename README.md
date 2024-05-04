@@ -2,7 +2,7 @@
 
 🍽️ Scrapes data about restaurants from the [MICHELIN Guide](https://guide.michelin.com/gb/en/restaurants), including Michelin Star and Bib Gourmand-awarded restaurants
 
-__Disclaimer__: I am not affiliated with MICHELIN, and use of this scraper by violate MICHELIN's terms and conditions or local laws.
+__Disclaimer__: I am not affiliated with MICHELIN, and use of this scraper may violate MICHELIN's terms and conditions or local laws.
 
 The output looks like this:
 
