@@ -1,0 +1,30 @@
+name: Run weekly full scrape
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scrape:
+    name: Scrape restaurants
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4.0.3
+        with:
+          node-version: 20.0
+          cache: "npm"
+      - run: npm install
+      - name: Perform full run of script
+        run: npm run start
+      - name: Upload data/restaurants.json as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: restaurants.json
+          path: data/restaurants.json
+          if-no-files-found: error
