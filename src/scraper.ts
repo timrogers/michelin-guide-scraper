@@ -43,28 +43,6 @@ export const getRestaurantUrlsOnPage = async (pageNumber: number): Promise<strin
 
 type Restaurant = Record<string, unknown>;
 
-export const getRestaurantDetailsFromUrl = async (
-  url: string,
-): Promise<Restaurant | undefined> => {
-  try {
-    const response = await fetch(url);
-    validateResponse(response);
-
-    const html = await response.text();
-    const $ = cheerio.load(html);
-    const metadataJson = $('script[type="application/ld+json"]').html();
-
-    if (!metadataJson) {
-      throw new Error(`Failed to find metadata JSON at ${url}`);
-    }
-
-    return JSON.parse(metadataJson) as Restaurant;
-  } catch (e) {
-    console.error(`Failed to fetch restaurant details from ${url}`);
-    console.error(e);
-  }
-};
-
 export const getRestaurantUrls = async ({
   lastPageNumber,
   limit,
@@ -96,28 +74,17 @@ export const getRestaurantUrls = async ({
   return restaurantUrls;
 };
 
-export const getRestaurants = async ({
-  restaurantUrls,
-  delayBetweenPagesInMilliseconds,
-}: {
-  restaurantUrls: Set<string>;
-  delayBetweenPagesInMilliseconds: number;
-}): Promise<Restaurant[]> => {
-  const restaurants: Restaurant[] = [];
+export const getRestaurantDetailsFromUrl = async (url: string): Promise<Restaurant> => {
+  const response = await fetch(url);
+  validateResponse(response);
 
-  const restaurantsCount = restaurantUrls.size;
-  const restaurantUrlsArray = Array.from(restaurantUrls);
+  const html = await response.text();
+  const $ = cheerio.load(html);
+  const metadataJson = $('script[type="application/ld+json"]').html();
 
-  for (let index = 0; index < restaurantUrlsArray.length; index++) {
-    const url = restaurantUrlsArray[index];
-    console.log(
-      `Fetching restaurant details from ${url} (${index + 1}/${restaurantsCount})...`,
-    );
-    const restaurant = await getRestaurantDetailsFromUrl(url);
-    if (restaurant) restaurants.push(restaurant);
-
-    await sleep(delayBetweenPagesInMilliseconds);
+  if (!metadataJson) {
+    throw new Error(`Failed to find metadata JSON at ${url}`);
   }
 
-  return restaurants;
+  return JSON.parse(metadataJson) as Restaurant;
 };
