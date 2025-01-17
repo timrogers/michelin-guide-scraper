@@ -15,7 +15,7 @@
     "cheerio": "^1.0.0",
     "commander": "^13.0.0",
     "p-map": "^7.0.3",
-    "undici": "^7.2.0"
+    "undici": "^7.2.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
