@@ -26,7 +26,7 @@ jobs:
       - name: Perform limited run of script
         run: npm run start -- --limit 1
       - name: Upload data/restaurants.json as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: restaurants.json
           path: data/restaurants.json
