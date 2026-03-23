@@ -9,19 +9,45 @@ permissions:
   contents: read
 
 jobs:
-  scrape:
-    name: Scrape restaurants
+  fetch-urls:
+    name: Fetch restaurant URLs
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4.3.0
         with:
-          node-version: 20.0
+          node-version: 24
           cache: "npm"
       - run: npm install
-      - name: Perform full run of script
-        run: npm run start
+      - name: Fetch restaurant URLs
+        run: npm run start -- fetch-urls
+      - name: Upload restaurant URLs as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: restaurant-urls
+          path: data/restaurant-urls.json
+          if-no-files-found: error
+
+  fetch-details:
+    name: Fetch restaurant details
+    needs: fetch-urls
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4.3.0
+        with:
+          node-version: 24
+          cache: "npm"
+      - run: npm install
+      - name: Download restaurant URLs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: restaurant-urls
+          path: data
+      - name: Fetch restaurant details
+        run: npm run start -- fetch-details
       - name: Upload data/restaurants.json as an artifact
         uses: actions/upload-artifact@v4
         with:
