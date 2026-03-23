@@ -23,8 +23,10 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
-      - name: Perform limited run of script
-        run: npm run start -- --limit 1
+      - name: Fetch restaurant URLs (limited)
+        run: npm run start -- fetch-urls --max-pages 1
+      - name: Fetch restaurant details (limited)
+        run: npm run start -- fetch-details --concurrency 1
       - name: Upload data/restaurants.json as an artifact
         uses: actions/upload-artifact@v4
         with:
